@@ -189,12 +189,16 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
     ];
 
     $form['message'] = [
-      '#type' => 'textarea',
+      '#type' => 'text_format',
       '#title' => t('Message'),
       '#required' => TRUE,
       '#default_value' => $form_state->getValue('message'),
       '#cols' => '80',
       '#rows' => '20',
+      '#allowed_formats' => [
+        'mail',
+        'plain_text',
+      ],
     ];
 
     $selected_count = $this->context['selected_count'];
@@ -206,6 +210,24 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
     $form['actions']['submit']['#attributes']['class'] = ['button button--primary js-form-submit form-submit btn js-form-submit btn-raised btn-primary waves-effect waves-btn waves-light'];
     $form['actions']['cancel']['#attributes']['class'] = ['button button--danger btn btn-flat waves-effect waves-btn'];
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    parent::submitConfigurationForm($form, $form_state);
+
+    $message = $this->configuration['message']['value'];
+
+    if ($this->configuration['message']['format'] === 'mail') {
+      $message = strtr($message, [
+        '<em>' => '<i>',
+        '</em>' => '</i>',
+      ]);
+    }
+
+    $this->configuration['message'] = $message;
   }
 
   /**
