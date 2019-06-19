@@ -246,16 +246,7 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
 
-    $message = $this->configuration['message']['value'];
-
-    if ($this->configuration['message']['format'] === 'mail') {
-      $message = strtr($message, [
-        '<em>' => '<i>',
-        '</em>' => '</i>',
-      ]);
-    }
-
-    $this->configuration['message'] = $message;
+    $this->configuration['message'] = $this->configuration['message']['value'];
   }
 
   /**
