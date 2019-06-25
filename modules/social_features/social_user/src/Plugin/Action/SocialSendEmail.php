@@ -204,8 +204,7 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
       '#cols' => '80',
       '#rows' => '20',
       '#allowed_formats' => [
-        'mail',
-        'plain_text',
+        'mail_html',
       ],
     ];
 
