@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - mentions
-name: Mail
-format: mail
+name: 'Mail HTML'
+format: mail_html
 weight: 0
 filters:
   filter_html:

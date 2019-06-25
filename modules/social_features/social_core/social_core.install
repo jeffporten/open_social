@@ -114,7 +114,7 @@ function _social_core_get_permissions($role) {
   $permissions['authenticated'] = array_merge($permissions['anonymous'], [
     'view own unpublished content',
     'use text format basic_html',
-    'use text format mail',
+    'use text format mail_html',
     'use text format simple_text',
   ]);
 
@@ -895,7 +895,7 @@ function social_core_update_8501() {
 }
 
 /**
- * Allow using the "Mail" text format by the logged user.
+ * Allow using the "Mail HTML" text format by the logged user.
  */
 function social_core_update_8601() {
   // Set some default permissions.
