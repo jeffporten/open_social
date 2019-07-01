@@ -71,13 +71,6 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
   protected $emailValidator;
 
   /**
-   * The configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * Constructs a SocialSendEmail object.
    *
    * @param array $configuration
