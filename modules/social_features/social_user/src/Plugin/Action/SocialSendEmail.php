@@ -71,7 +71,14 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
   protected $emailValidator;
 
   /**
-   * Constructs a ViewsBulkOperationSendEmail object.
+   * The configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Constructs a SocialSendEmail object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -92,7 +99,17 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
    * @param \Egulias\EmailValidator\EmailValidator $email_validator
    *   The email validator.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Token $token, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger, MailManagerInterface $mail_manager, LanguageManagerInterface $language_manager, EmailValidator $email_validator) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    Token $token,
+    EntityTypeManagerInterface $entity_type_manager,
+    LoggerInterface $logger,
+    MailManagerInterface $mail_manager,
+    LanguageManagerInterface $language_manager,
+    EmailValidator $email_validator
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->token = $token;
@@ -141,7 +158,7 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
     $params = ['context' => $this->configuration];
     $email = $this->getEmail($entity);
 
-    $message = $this->mailManager->mail('system', 'action_send_email', $email, $langcode, $params);
+    $message = $this->mailManager->mail('system', 'action_send_email', $email, $langcode, $params, $this->configuration['reply']);
 
     // Error logging is handled by \Drupal\Core\Mail\MailManager::mail().
     if ($message['result']) {
@@ -188,6 +205,12 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
    *   The configuration form.
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $form['reply'] = [
+      '#type' => 'email',
+      '#title' => $this->t('Reply-to'),
+      '#description' => $this->t('A Reply-To address is the email address that receives messages sent from those who select Reply in their email clients.'),
+    ];
+
     $form['subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Subject'),
@@ -208,9 +231,8 @@ class SocialSendEmail extends ViewsBulkOperationsActionBase implements Container
       ],
     ];
 
-    $selected_count = $this->context['selected_count'];
     $form['#title'] = $this->t('Send an email to :selected_count members', [
-      ':selected_count' => $selected_count,
+      ':selected_count' => $this->context['selected_count'],
     ]);
 
     if (isset($form['list'])) {

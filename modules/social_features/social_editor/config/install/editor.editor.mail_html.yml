@@ -23,10 +23,10 @@ settings:
             - DrupalLink
             - DrupalUnlink
   plugins:
-    stylescombo:
-      styles: ''
     language:
       language_list: un
+    stylescombo:
+      styles: ''
 image_upload:
   status: false
   scheme: public
